@@ -18,12 +18,10 @@ env:
 before_install:
 #  - echo "extension=zip.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - composer self-update
-  - ls -l
-  - chown -R travis:travis ./var
-  - docker run -u $UID -v $PWD/var:/app -w /app nouchka/sqlite3 data.db
 
 install:
   - COMPOSER_MEMORY_LIMIT=-1 composer install
+  - docker run -u $UID -v $PWD/var:/app -w /app nouchka/sqlite3 data.db
   - ./bin/console cache:clear
   - ./bin/console doctrine:schema:create
   - ./bin/console doctrine:migrations:migrate -n
