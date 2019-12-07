@@ -26,6 +26,16 @@ class Currency
      */
     private $symbol;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $is_root;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $ration;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -51,6 +61,30 @@ class Currency
     public function setSymbol(string $symbol): self
     {
         $this->symbol = $symbol;
+
+        return $this;
+    }
+
+    public function getIsRoot(): ?bool
+    {
+        return $this->is_root;
+    }
+
+    public function setIsRoot(bool $is_root): self
+    {
+        $this->is_root = $is_root;
+
+        return $this;
+    }
+
+    public function getRation(): ?int
+    {
+        return $this->ration;
+    }
+
+    public function setRation(int $ration): self
+    {
+        $this->ration = $ration;
 
         return $this;
     }

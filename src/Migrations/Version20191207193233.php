@@ -19,7 +19,7 @@ final class Version20191207193233 extends AbstractMigration
 
     public function up(Schema $schema) : void
     {
-        $this->addSql("INSERT INTO currency(name, symbol) VALUES ('USD', '$'), ('RUB', 'р')");
+        $this->addSql("INSERT INTO currency(name, symbol, is_root, ration) VALUES ('USD', '$', 1, 100), ('RUB', 'р', 0, 100)");
     }
 
     public function down(Schema $schema) : void

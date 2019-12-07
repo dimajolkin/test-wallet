@@ -17,7 +17,8 @@
         "symfony/orm-pack": "^1.0",
         "symfony/serializer-pack": "^1.0",
         "symfony/validator": "4.4.*",
-        "symfony/yaml": "4.4.*"
+        "symfony/yaml": "4.4.*",
+      "ext-json": "*"
     },
     "require-dev": {
         "codeception/codeception": "^3.1",

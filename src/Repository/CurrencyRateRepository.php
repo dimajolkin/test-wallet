@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Currency;
 use App\Entity\CurrencyRate;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -47,4 +48,9 @@ class CurrencyRateRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function getLast(int $id): ?CurrencyRate
+    {
+        return $this->findOneBy(['currency_id' => $id], ['date_create' => 'DESC']);
+    }
 }

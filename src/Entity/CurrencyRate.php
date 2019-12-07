@@ -29,7 +29,7 @@ class CurrencyRate
     /**
      * @ORM\Column(type="datetime")
      */
-    private $date;
+    private $date_create;
 
     public function getId(): ?int
     {
@@ -60,14 +60,14 @@ class CurrencyRate
         return $this;
     }
 
-    public function getDate(): ?\DateTimeInterface
+    public function getDateCreate(): ?\DateTimeInterface
     {
-        return $this->date;
+        return $this->date_create;
     }
 
-    public function setDate(\DateTimeInterface $date): self
+    public function setDateCreate(\DateTimeInterface $date): self
     {
-        $this->date = $date;
+        $this->date_create = $date;
 
         return $this;
     }

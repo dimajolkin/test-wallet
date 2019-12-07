@@ -19,6 +19,23 @@ class CurrencyRepository extends ServiceEntityRepository
         parent::__construct($registry, Currency::class);
     }
 
+    public function getRoot(): Currency
+    {
+        return $this->findOneBy(['is_root' => 1]);
+    }
+
+    /**
+     * @return Currency[]
+     */
+    public function findAllGroupByName(): iterable
+    {
+        $currencies = [];
+        foreach ($this->findAll() as $currency) {
+            $currencies[$currency->getName()] = $currency;
+        }
+        return $currencies;
+    }
+
     // /**
     //  * @return Currency[] Returns an array of Currency objects
     //  */
