@@ -21,6 +21,12 @@ class User
      */
     private $name;
 
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Wallet", inversedBy="user", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $wallet;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -34,6 +40,18 @@ class User
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getWallet(): ?Wallet
+    {
+        return $this->wallet;
+    }
+
+    public function setWallet(Wallet $wallet_id): self
+    {
+        $this->wallet = $wallet_id;
 
         return $this;
     }

@@ -19,11 +19,6 @@ class Wallet
     /**
      * @ORM\Column(type="integer")
      */
-    private $user_id;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
     private $currency_id;
 
     /**
@@ -41,21 +36,10 @@ class Wallet
      */
     private $date_update;
 
+
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getUserId(): ?int
-    {
-        return $this->user_id;
-    }
-
-    public function setUserId(int $user_id): self
-    {
-        $this->user_id = $user_id;
-
-        return $this;
     }
 
     public function getCurrencyId(): ?int
