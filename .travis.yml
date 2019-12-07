@@ -26,7 +26,7 @@ install:
   - ./bin/console doctrine:schema:create
   - ./bin/console doctrine:migrations:migrate -n
   - ./vendor/bin/codecept build
-  - ./bin/console server:start
+  - ./bin/console server:start 0.0.0.0:8888
 
 script:
   - ./vendor/bin/codecept run
