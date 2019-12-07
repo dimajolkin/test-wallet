@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  app:
+    image: php:7.4
+    volumes:
+      - $PWD:$PWD
+    ports:
+      - 8888:80
+    command: $PWD/bin/console server:start 0.0.0.0:80
+
