@@ -11,6 +11,7 @@ cache:
     - docker_images
 
 before_install:
+  - echo "extension=zip.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - docker run -u $UID -v $PWD/var:/app -w /app nouchka/sqlite3 data.db
   - composer self-update
 
