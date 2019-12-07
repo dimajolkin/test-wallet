@@ -10,6 +10,11 @@ cache:
     - ./bin/.phpunit
     - docker_images
 
+env:
+  global:
+    - SYMFONY_DEPRECATIONS_HELPER=0
+    - APP_ENV="dev"
+
 before_install:
 #  - echo "extension=zip.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - docker run -u $UID -v $PWD/var:/app -w /app nouchka/sqlite3 data.db
