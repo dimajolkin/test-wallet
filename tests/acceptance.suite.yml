@@ -8,6 +8,7 @@ actor: AcceptanceTester
 modules:
     enabled:
         - \App\Tests\Helper\Acceptance
+        - Asserts
         - REST:
             url: http://localhost:8888
             depends: PhpBrowser

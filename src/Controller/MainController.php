@@ -5,10 +5,6 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Entity\Wallet;
 use App\Form\UserType;
-use App\Repository\WalletRepository;
-use Monolog\Formatter\FormatterInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,12 +12,13 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class MainController extends AbstractController
 {
+    protected const GROUPS = ['rest'];
     /**
      * @Route("/v1/user/{id}", name="get_user", methods={"GET"})
      * @param User|null $user
      * @return JsonResponse
      */
-    public function getUser(?User $user)
+    public function user(?User $user)
     {
         if ($user) {
             return $this->json($user);
@@ -37,8 +34,9 @@ class MainController extends AbstractController
      *
      * @param Request $request
      * @return JsonResponse
+     * @throws \Exception
      */
-    public function createUser(Request $request, WalletRepository $walletRepository)
+    public function createUser(Request $request)
     {
         $form = $this->createForm(UserType::class, new User());
         $form->submit($request->request->all());

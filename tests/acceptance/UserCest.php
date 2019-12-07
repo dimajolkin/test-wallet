@@ -6,9 +6,16 @@ use App\Tests\AcceptanceTester;
 
 class UserCest
 {
+    private function getUserId(AcceptanceTester $I, $id): array
+    {
+        $I->sendGET('/v1/user/' . $id);
+        $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
+        $I->seeResponseIsJson();
+        return json_decode($I->grabResponse(), true);
+    }
     public function getNotFoundUser(AcceptanceTester $I)
     {
-        $I->sendGET('/v1/user/8888');
+        $I->sendGET('/v1/user/16');
         $I->seeResponseCodeIs(\Codeception\Util\HttpCode::NOT_FOUND);
         $I->seeResponseIsJson();
         $I->seeResponseContains('{"message":"not found"}');
@@ -20,7 +27,8 @@ class UserCest
             'name' => 'ivan',
         ]);
         $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
-        $I->seeResponseIsJson();
+        $createdUser = json_decode($I->grabResponse(), true);
+        $I->assertEquals($createdUser, $this->getUserId($I, $createdUser['id']));
     }
 
 }
