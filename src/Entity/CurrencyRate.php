@@ -18,6 +18,7 @@ class CurrencyRate
 
     /**
      * @ORM\Column(type="integer")
+     * @var int
      */
     private $currency_id;
 
@@ -41,9 +42,9 @@ class CurrencyRate
         return $this->currency_id;
     }
 
-    public function setCurrencyId(int $currency_id): self
+    public function setCurrencyId(int $currencyId): self
     {
-        $this->currency_id = $currency_id;
+        $this->currency_id = $currencyId;
 
         return $this;
     }

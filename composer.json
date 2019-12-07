@@ -22,6 +22,7 @@
     },
     "require-dev": {
         "codeception/codeception": "^3.1",
+        "phpstan/phpstan-strict-rules": "^0.12.0",
         "phpstan/phpstan-symfony": "^0.12.0",
         "symfony/maker-bundle": "^1.14",
         "symfony/web-server-bundle": "4.4.*",
@@ -62,7 +63,7 @@
             "@auto-scripts"
         ],
         "check-cs": "vendor/bin/ecs check bin src tests",
-        "phpstan": "vendor/bin/phpstan analyse bin src tests/acceptance"
+        "phpstan": "vendor/bin/phpstan analyse src"
     },
     "conflict": {
         "symfony/symfony": "*"

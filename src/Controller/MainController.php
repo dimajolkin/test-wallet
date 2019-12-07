@@ -20,7 +20,7 @@ class MainController extends AbstractController
      */
     public function user(?User $user)
     {
-        if ($user) {
+        if ($user !== null) {
             return $this->json($user);
         }
 
@@ -59,7 +59,6 @@ class MainController extends AbstractController
         return $this->json([
             'errors' => (string) $form->getErrors(),
         ]);
-
     }
 
 

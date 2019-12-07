@@ -39,20 +39,18 @@ class CurrencyRateUpdateCommand extends Command
     )
     {
         $this->entityManager = $entityManager;
-        parent::__construct();
         $this->currencyRepository = $currencyRepository;
         $this->currencyRateRepository = $currencyRateRepository;
+        parent::__construct();
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
-            ->setDescription('Add a short description for your command')
-            ->addArgument('arg1', InputArgument::OPTIONAL, 'Argument description')
-            ->addOption('option1', null, InputOption::VALUE_NONE, 'Option description');
+            ->setDescription('Actualization currency rate');
     }
 
-    private function insert(Currency $currency, $value): CurrencyRate
+    private function insert(Currency $currency, int $value): CurrencyRate
     {
         $rate = new CurrencyRate();
         $rate->setCurrencyId($currency->getId());
@@ -75,10 +73,10 @@ class CurrencyRateUpdateCommand extends Command
         $response = json_decode($context, true);
 
         foreach ($response['rates'] as $currencyName => $value) {
-            $currency = $currencies[$currencyName];
+            $currency = $currencies[$currencyName] ?? null;
             $last = $this->currencyRateRepository->getLast($currency->getId());
             $newValue = (int) ($currency->getRation() * $value);
-            if (!$last) {
+            if ($last === null) {
                 $rate = $this->insert($currency, $newValue);
                 $this->entityManager->persist($rate);
             } elseif ($last->getValue() !== $newValue) {

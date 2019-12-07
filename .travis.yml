@@ -30,4 +30,6 @@ install:
 
 script:
   - composer check-cs
+  - composer phpstan
+  - ./bin/console app:currency-rate-update
   - ./vendor/bin/codecept run

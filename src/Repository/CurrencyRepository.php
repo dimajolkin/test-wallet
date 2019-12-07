@@ -19,7 +19,7 @@ class CurrencyRepository extends ServiceEntityRepository
         parent::__construct($registry, Currency::class);
     }
 
-    public function getRoot(): Currency
+    public function getRoot(): ?Currency
     {
         return $this->findOneBy(['is_root' => 1]);
     }
