@@ -59,7 +59,9 @@
         ],
         "post-update-cmd": [
             "@auto-scripts"
-        ]
+        ],
+        "check-cs": "vendor/bin/ecs check bin src tests packages",
+        "phpstan": "vendor/bin/phpstan analyse bin src tests packages --level max"
     },
     "conflict": {
         "symfony/symfony": "*"

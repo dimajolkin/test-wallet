@@ -17,6 +17,7 @@ before_install:
 
 install:
   - COMPOSER_MEMORY_LIMIT=-1 composer install
+  - ./bin/console cache:clear
   - ./bin/console doctrine:schema:create
   - ./bin/console doctrine:migrations:migrate -n
   - ./vendor/bin/codecept build
