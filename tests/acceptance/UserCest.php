@@ -15,7 +15,7 @@ class UserCest
     }
     public function getNotFoundUser(AcceptanceTester $I)
     {
-        $I->sendGET('/v1/user/16');
+        $I->sendGET('/v1/user/8888');
         $I->seeResponseCodeIs(\Codeception\Util\HttpCode::NOT_FOUND);
         $I->seeResponseIsJson();
         $I->seeResponseContains('{"message":"not found"}');

@@ -2,19 +2,22 @@ language: php
 sudo: false
 php:
   - 7.4
-
+services:
+  - docker
 cache:
   directories:
     - $HOME/.composer/cache/files
     - ./bin/.phpunit
 
 before_install:
+  - docker run -ti -u $UID -v $PWD/var:/app -w /app nouchka/sqlite3 data.db
   - composer self-update
 
 install:
   - COMPOSER_MEMORY_LIMIT=-1 composer install
-  - ./bin/console server:start
+  - ./bin/console doctrine:schema:create
   - ./vendor/bin/codecept build
+  - ./bin/console server:start
 
 script:
   - ./vendor/bin/codecept run
