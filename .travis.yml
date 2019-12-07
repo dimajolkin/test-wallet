@@ -1,5 +1,5 @@
 language: php
-sudo: false
+sudo: true
 php:
   - 7.1
 services:
@@ -17,10 +17,10 @@ env:
 
 before_install:
 #  - echo "extension=zip.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - docker run -u $UID -v $PWD/var:/app -w /app nouchka/sqlite3 data.db
   - composer self-update
   - ls -l
-  - sudo chmod -R 777 ./var/cache
+  - chown -R travis:travis ./var
+  - docker run -u $UID -v $PWD/var:/app -w /app nouchka/sqlite3 data.db
 
 install:
   - COMPOSER_MEMORY_LIMIT=-1 composer install
