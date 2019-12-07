@@ -12,21 +12,24 @@ cache:
 
 env:
   global:
+    - DOCKER_COMPOSE_VERSION=1.4.2
     - SYMFONY_DEPRECATIONS_HELPER=0
-    - APP_ENV="dev"
+    - APP_ENV="test"
 
 before_install:
-#  - echo "extension=zip.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - sudo rm /usr/local/bin/docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
   - composer self-update
 
 install:
   - COMPOSER_MEMORY_LIMIT=-1 composer install
   - docker run -u $UID -v $PWD/var:/app -w /app nouchka/sqlite3 data.db
-  - ./bin/console cache:clear
-  - ./bin/console doctrine:schema:create
-  - ./bin/console doctrine:migrations:migrate -n
-  - ./vendor/bin/codecept build
-  - ./bin/console server:start 0.0.0.0:8888
+  - docker-compose run app ./bin/console doctrine:schema:create
+  - docker-compose run app ./bin/console doctrine:migrations:migrate -n
+  - docker-compose run app ./vendor/bin/codecept build
+  - docker-compose up -d
 
 script:
   - composer check-cs

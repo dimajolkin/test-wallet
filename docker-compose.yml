@@ -2,10 +2,11 @@ version: '3'
 
 services:
   app:
-    image: php:7.1
+    build:
+      context: .
     volumes:
-      - $PWD:$PWD
+      - $PWD:/app
     ports:
       - 8888:80
-    command: $PWD/bin/console server:start 0.0.0.0:80
+    command: ./bin/console server:start 0.0.0.0:80
 
