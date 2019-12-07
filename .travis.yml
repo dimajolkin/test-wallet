@@ -21,7 +21,8 @@ before_install:
   - composer self-update
 
 install:
-  - chmod -R 777 var/cache
+  - ls -l
+  - sudo chmod -R 777 var/cache
   - COMPOSER_MEMORY_LIMIT=-1 composer install
   - ./bin/console cache:clear
   - ./bin/console doctrine:schema:create
