@@ -24,11 +24,11 @@ before_install:
   - composer self-update
 
 install:
-  - COMPOSER_MEMORY_LIMIT=-1 composer install
   - docker run -u $UID -v $PWD/var:/app -w /app nouchka/sqlite3 data.db
-  - docker-compose run app ./bin/console doctrine:schema:create
-  - docker-compose run app ./bin/console doctrine:migrations:migrate -n
-  - docker-compose run app ./vendor/bin/codecept build
+  - docker-compose run --rm app composer install
+  - docker-compose run --rm app ./bin/console doctrine:schema:create
+  - docker-compose run --rm app ./bin/console doctrine:migrations:migrate -n
+  - docker-compose run --rm app ./vendor/bin/codecept build
   - docker-compose up -d
 
 script:
