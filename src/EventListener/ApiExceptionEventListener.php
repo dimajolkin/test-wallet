@@ -45,9 +45,9 @@ class ApiExceptionEventListener implements EventSubscriberInterface, LoggerAware
 
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             KernelEvents::EXCEPTION => 'onKernelException'
-        );
+        ];
     }
 
 

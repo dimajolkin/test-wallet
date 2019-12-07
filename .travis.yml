@@ -29,4 +29,5 @@ install:
   - ./bin/console server:start 0.0.0.0:8888
 
 script:
+  - composer check-cs
   - ./vendor/bin/codecept run
