@@ -21,12 +21,13 @@ before_install:
   - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
+  - docker-compose build
+  - docker-compose up -d
+  - sleep 10
+  - docker ps
 
 install:
   - docker run -u $UID -v $PWD/var:/app -w /app nouchka/sqlite3 data.sqlite
-  - docker-compose build
-  - docker-compose up -d
-  - sleep 2
   - docker ps
   - docker-compose exec app composer install
   - docker-compose exec app ./bin/console doctrine:schema:create
