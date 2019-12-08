@@ -2,12 +2,14 @@
 
 namespace App\Service\CurrencyService;
 
+use App\Entity\Currency;
 use App\Entity\CurrencyRate;
 use App\Repository\CurrencyRateRepository;
 use App\Repository\CurrencyRepository;
 use App\Service\CurrencyService\RateApi\Rate;
 use App\Service\CurrencyService\RateApi\RateApi;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Validator\Exception\ValidatorException;
 
 class CurrencyService
 {
@@ -40,6 +42,33 @@ class CurrencyService
         $this->currencyRateRepository = $currencyRateRepository;
     }
 
+    public function getByName(string $name): ?Currency
+    {
+        return $this->currencyRepository->getByName($name);
+    }
+
+    public function getRoot(): ?Currency
+    {
+        return $this->currencyRepository->getRoot();
+    }
+
+    public function throwCurrencyNotFound(string $name)
+    {
+        throw new ValidatorException("$name not found");
+    }
+
+    public function getCurrency(?string $name, Currency $root = null): Currency
+    {
+        $defaultCurrency = $root !== null ? $root : $this->getRoot();
+
+        $currency = $name !== null
+            ? $this->getByName($name)
+            : $defaultCurrency;
+        if ($currency === null) {
+            $this->throwCurrencyNotFound($name);
+        }
+        return $currency;
+    }
 
     private function insert(Rate $rate): CurrencyRate
     {

@@ -2,6 +2,8 @@
 
 namespace App\Tests\acceptance;
 
+use App\Service\CurrencyService\CurrencyEnum;
+use App\Service\CurrencyService\Operation\CauseEnum;
 use App\Tests\AcceptanceTester;
 use Codeception\Example;
 use Codeception\Util\HttpCode;
@@ -60,9 +62,9 @@ class UserCest
         $I->seeResponseIsJson();
     }
 
-    public function getWallet(AcceptanceTester $I)
+    public function getWallet(AcceptanceTester $I): array
     {
-        $id = $this->createUser($I, new Example(['wallet_currency' => 'RUB']));
+        $id = $this->createUser($I, new Example(['wallet_currency' => CurrencyEnum::RUB]));
         $I->assertNotEmpty($id);
         $I->sendGET("/v1/user/$id/wallet");
         $I->seeResponseCodeIs(HttpCode::OK);
@@ -75,11 +77,34 @@ class UserCest
            'date_create' => 'string:!empty',
            'date_update' => 'string:!empty',
         ]);
+        return json_decode($I->grabResponse(), true);
     }
 
 
-    public function putMoneyInWallet(AcceptanceTester $I)
-    {
-
-    }
+//    /**
+//     * @param AcceptanceTester $I
+//     *
+//     * @example {"currency": "RUB", "value": "1", "result": 100}
+//     */
+//    public function putMoneyInWallet(AcceptanceTester $I, Example $example)
+//    {
+//        $id = $this->createUser($I, new Example(['wallet_currency' => CurrencyEnum::RUB]));
+//        $walletId = $I->grabFromDatabase('user', 'wallet_id', ['id' => $id]);
+//        $I->seeInDatabase('wallet', ['id' => $walletId, 'value' => 0]);
+//
+//        $I->sendPOST("/v1/user/{$id}/wallet/operation", [
+//            'money' => [
+//                'currency' => $example['currency'],
+//                'value' => $example['value'],
+//            ],
+//            'cause' => CauseEnum::STOCK,
+//        ]);
+//
+//        dump($I->grabResponse());
+//        die;
+//        $I->seeResponseCodeIs(HttpCode::OK);
+//        $I->seeResponseIsJson();
+//        $I->seeResponseContains('{"status":"ok"}');
+//        $I->seeInDatabase('wallet', ['id' => $walletId, 'value' => $example['result']]);
+//    }
 }

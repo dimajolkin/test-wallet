@@ -3,29 +3,23 @@
 namespace App\Service\UserService;
 
 use App\Entity\Wallet;
-use App\Repository\CurrencyRepository;
-use Symfony\Component\Validator\Exception\ValidatorException;
+use App\Service\CurrencyService\CurrencyService;
 
 class WalletFactory
 {
     /**
-     * @var CurrencyRepository
+     * @var CurrencyService
      */
-    private $currencyRepository;
+    private $currencyService;
 
-    public function __construct(CurrencyRepository $currencyRepository)
+    public function __construct(CurrencyService $currencyService)
     {
-        $this->currencyRepository = $currencyRepository;
+        $this->currencyService = $currencyService;
     }
 
     public function buildEmpty(?string $walletCurrencyName): Wallet
     {
-        $currency = $walletCurrencyName !== null
-            ? $this->currencyRepository->getByName($walletCurrencyName)
-            : $this->currencyRepository->getRoot();
-        if ($currency === null) {
-            throw new ValidatorException("$walletCurrencyName not found");
-        }
+        $currency = $this->currencyService->getCurrency($walletCurrencyName);
 
         $wallet = new Wallet();
         $wallet->setValue(0);

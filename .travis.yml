@@ -25,8 +25,7 @@ before_install:
 
 install:
   - docker run -u $UID -v $PWD/var:/app -w /app nouchka/sqlite3 data.db
-  - docker-compose -v
-  - ls -l
+  - chown travis:travis ./var/data.sqlite
   - docker-compose build
   - docker-compose run --rm app composer install
   - docker-compose run --rm app ./bin/console doctrine:schema:create
@@ -38,5 +37,5 @@ install:
 script:
   - composer check-cs
   - composer phpstan
-  - ./bin/console app:currency-rate-update
-  - ./vendor/bin/codecept run
+  - docker-compose run --rm app ./bin/console app:currency-rate-update
+  - docker-compose run --rm app ./vendor/bin/codecept run
