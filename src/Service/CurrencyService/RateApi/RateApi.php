@@ -1,22 +1,20 @@
 <?php
 
-namespace App\Service\CurrencyRateApi;
+namespace App\Service\CurrencyService\RateApi;
 
 use App\Entity\Currency;
 use App\Repository\CurrencyRepository;
-use App\Service\CurrencyRateApi\Rate;
 
-class CurrencyRateApi
+class RateApi
 {
     const API_URL = 'https://api.exchangeratesapi.io/latest';
-
 
     /**
      * @param Currency $root
      * @param CurrencyRepository $currencyRepository
      * @return Rate[]
      */
-    public function response(Currency $root, CurrencyRepository $currencyRepository)
+    public function getRates(Currency $root, CurrencyRepository $currencyRepository): iterable
     {
         $currencies = $currencyRepository->findAllGroupByName();
         unset($currencies[$root->getName()]);

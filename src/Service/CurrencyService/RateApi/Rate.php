@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\CurrencyRateApi;
+namespace App\Service\CurrencyService\RateApi;
 
 use App\Entity\Currency;
 
