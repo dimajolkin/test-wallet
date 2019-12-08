@@ -26,6 +26,7 @@ install:
   - docker run -u $UID -v $PWD/var:/app -w /app nouchka/sqlite3 data.sqlite
   - docker-compose build
   - docker-compose up -d
+  - sleep 2
   - docker-compose exec app composer install
   - docker-compose exec app ./bin/console doctrine:schema:create
   - docker-compose exec app ./bin/console doctrine:migrations:migrate -n
