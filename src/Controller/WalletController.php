@@ -20,9 +20,6 @@ class WalletController extends AbstractController
             return $this->notFoundResponse();
         }
 
-        return $this->json([
-            'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/UserController.php',
-        ]);
+        return $this->json($user->getWallet());
     }
 }

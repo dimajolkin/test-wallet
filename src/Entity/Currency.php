@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CurrencyRepository")
@@ -18,6 +19,7 @@ class Currency
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"rest"})
      */
     private $name;
 

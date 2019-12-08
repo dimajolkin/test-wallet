@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 abstract class AbstractController extends BaseAbstractController
 {
-    protected const GROUPS = [];
+    protected const GROUPS = ['rest'];
 
     public function notFoundResponse(): JsonResponse
     {

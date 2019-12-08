@@ -18,9 +18,11 @@ class Wallet
     private $id;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\OneToOne(targetEntity="App\Entity\Currency", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=false)
+     * @Groups({"rest"})
      */
-    private $currency_id;
+    private $currency;
 
     /**
      * @ORM\Column(type="integer")
@@ -30,11 +32,13 @@ class Wallet
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"rest"})
      */
     private $date_create;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Groups({"rest"})
      */
     private $date_update;
 
@@ -44,14 +48,14 @@ class Wallet
         return $this->id;
     }
 
-    public function getCurrencyId(): ?int
+    public function getCurrency(): Currency
     {
-        return $this->currency_id;
+        return $this->currency;
     }
 
-    public function setCurrencyId(int $currency_id): self
+    public function setCurrency(Currency $currency): self
     {
-        $this->currency_id = $currency_id;
+        $this->currency = $currency;
 
         return $this;
     }

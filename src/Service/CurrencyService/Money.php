@@ -1,0 +1,27 @@
+<?php
+
+
+namespace App\Service\CurrencyService;
+
+
+use App\Entity\Currency;
+
+class Money
+{
+    /** @var Currency */
+    private $currency;
+    /** @var int  */
+    private $value;
+
+    /**
+     * Money constructor.
+     * @param Currency $currency
+     * @param $value
+     */
+    public function __construct(Currency $currency, int $value)
+    {
+        $this->currency = $currency;
+        $this->value = $value;
+    }
+
+}

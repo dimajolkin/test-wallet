@@ -24,6 +24,11 @@ class CurrencyRepository extends ServiceEntityRepository
         return $this->findOneBy(['is_root' => 1]);
     }
 
+    public function getByName(string $name): ?Currency
+    {
+        return $this->findOneBy(['name' => $name]);
+    }
+
     /**
      * @return Currency[]
      */
@@ -64,4 +69,5 @@ class CurrencyRepository extends ServiceEntityRepository
         ;
     }
     */
+
 }

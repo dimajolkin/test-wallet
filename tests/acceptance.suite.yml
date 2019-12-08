@@ -13,3 +13,8 @@ modules:
             url: http://localhost:8888
             depends: PhpBrowser
             part: Json
+        - Db:
+            dsn: 'sqlite:var/data.sqlite'
+            user: root
+            password: ''
+            cleanup: true

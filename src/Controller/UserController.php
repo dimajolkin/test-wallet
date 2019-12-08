@@ -4,14 +4,20 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Entity\Wallet;
+use App\Exception\DomainException;
 use App\Form\UserType;
+use App\Repository\CurrencyRepository;
+use App\Service\UserService\WalletFactory;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Exception\ValidatorException;
 
 class UserController extends AbstractController
 {
     protected const GROUPS = ['rest'];
+
     /**
      * @Route("/v1/user/{id}", name="get_user", methods={"GET"})
      * @param User|null $user
@@ -30,32 +36,35 @@ class UserController extends AbstractController
      * @Route("/v1/user", name="create_user", methods={"POST"})
      *
      * @param Request $request
+     * @param WalletFactory $walletFactory
      * @return JsonResponse
      * @throws \Exception
      */
-    public function createUser(Request $request)
+    public function createUser(Request $request, WalletFactory $walletFactory)
     {
-        $form = $this->createForm(UserType::class, new User());
-        $form->submit($request->request->all());
-        if ($form->isSubmitted() && $form->isValid()) {
-            /** @var User $user */
-            $user = $form->getData();
-            $wallet = new Wallet();
-            $wallet->setValue(0);
-            $wallet->setCurrencyId(1);
-            $wallet->setDateCreate(new \DateTime('now'));
-            $wallet->setDateUpdate(new \DateTime('now'));
+        try {
+            $wallet = $walletFactory->buildEmpty($request->request->get('wallet_currency', null));
+            $request->request->remove('wallet_currency');
 
-            $user->setWallet($wallet);
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($user);
-            $em->flush();
-            return $this->json($user);
+            $form = $this->createForm(UserType::class, new User());
+            $form->submit($request->request->all());
+            if ($form->isSubmitted() && $form->isValid()) {
+                /** @var User $user */
+                $user = $form->getData();
+                $user->setWallet($wallet);
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($user);
+                $em->flush();
+                return $this->json($user);
+            }
+            return $this->json([
+                'errors' => (string) $form->getErrors(),
+            ]);
+        } catch (ValidatorException $exception) {
+            return $this->json([
+                'message' => $exception->getMessage(),
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
-
-        return $this->json([
-            'errors' => (string) $form->getErrors(),
-        ]);
     }
 
 
