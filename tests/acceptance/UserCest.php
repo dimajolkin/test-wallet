@@ -27,11 +27,11 @@ class UserCest
     }
 
     /**
-     * @example { "wallet_currency": "RUB"}
-     * @example { "wallet_currency": "USD"}
      * @param AcceptanceTester $I
      * @param \Codeception\Example $example
      * @return mixed
+     * @example { "wallet_currency": "USD"}
+     * @example { "wallet_currency": "RUB"}
      */
     public function createUser(AcceptanceTester $I, \Codeception\Example $example)
     {
@@ -70,41 +70,36 @@ class UserCest
         $I->seeResponseCodeIs(HttpCode::OK);
         $I->seeResponseIsJson();
         $I->canSeeResponseMatchesJsonType([
-           'value' => 'integer:=0',
-           'currency' => [
-               'name' => 'string:!empty',
-           ],
-           'date_create' => 'string:!empty',
-           'date_update' => 'string:!empty',
+            'value' => 'integer:=0',
+            'currency' => [
+                'name' => 'string:!empty',
+            ],
+            'date_create' => 'string:!empty',
+            'date_update' => 'string:!empty',
         ]);
         return json_decode($I->grabResponse(), true);
     }
 
 
-//    /**
-//     * @param AcceptanceTester $I
-//     *
-//     * @example {"currency": "RUB", "value": "1", "result": 100}
-//     */
-//    public function putMoneyInWallet(AcceptanceTester $I, Example $example)
-//    {
-//        $id = $this->createUser($I, new Example(['wallet_currency' => CurrencyEnum::RUB]));
-//        $walletId = $I->grabFromDatabase('user', 'wallet_id', ['id' => $id]);
-//        $I->seeInDatabase('wallet', ['id' => $walletId, 'value' => 0]);
-//
-//        $I->sendPOST("/v1/user/{$id}/wallet/operation", [
-//            'money' => [
-//                'currency' => $example['currency'],
-//                'value' => $example['value'],
-//            ],
-//            'cause' => CauseEnum::STOCK,
-//        ]);
-//
-//        dump($I->grabResponse());
-//        die;
-//        $I->seeResponseCodeIs(HttpCode::OK);
-//        $I->seeResponseIsJson();
-//        $I->seeResponseContains('{"status":"ok"}');
-//        $I->seeInDatabase('wallet', ['id' => $walletId, 'value' => $example['result']]);
-//    }
+    /**
+     * @param AcceptanceTester $I
+     *
+     * @example {"currency": "RUB", "value": "100", "result": 100}
+     */
+    public function putMoneyInWallet(AcceptanceTester $I, Example $example)
+    {
+        $id = $this->createUser($I, new Example(['wallet_currency' => CurrencyEnum::RUB]));
+        $walletId = $I->grabFromDatabase('user', 'wallet_id', ['id' => $id]);
+        $I->seeInDatabase('wallet', ['id' => $walletId, 'value' => 0]);
+
+        $I->sendPOST("/v1/user/{$id}/wallet/operation", [
+            'currency' => $example['currency'],
+            'value' => $example['value'],
+            'cause' => CauseEnum::STOCK,
+        ]);
+        $I->seeResponseCodeIs(HttpCode::OK);
+        $I->seeResponseIsJson();
+        $I->seeResponseContains('{"status":"ok"}');
+        $I->seeInDatabase('wallet', ['id' => $walletId, 'value' => $example['result']]);
+    }
 }

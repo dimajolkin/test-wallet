@@ -37,13 +37,19 @@ class WalletController extends AbstractController
      */
     public function operation(User $user, MoneyFactory $moneyFactory, OperationService $operationService, Request $request)
     {
+        $wallet = $user->getWallet();
         //@TODO add validation
         $money = $moneyFactory->build(
-            $user->getWallet(),
-            $request->query->get('currency'),
-            $request->query->getInt('value')
+            $wallet,
+            $request->request->get('currency'),
+            $request->request->getInt('value')
         );
-        $operationService->append($user, $money, $request->get('cause'));
+        $operationService->update($wallet, $money, $request->get('cause'));
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($wallet);
+        $em->flush();
+
         return $this->json([
             'status' => 'ok',
         ]);

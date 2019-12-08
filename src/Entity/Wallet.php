@@ -2,6 +2,9 @@
 
 namespace App\Entity;
 
+use App\Service\CurrencyService\Money;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -42,10 +45,24 @@ class Wallet
      */
     private $date_update;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\WalletOperation", mappedBy="wallet", cascade={"persist", "remove"})
+     */
+    private $walletOperations;
+
+    public function __construct()
+    {
+        $this->walletOperations = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getMoney(): Money
+    {
+        return new Money($this->getCurrency(), $this->getValue());
     }
 
     public function getCurrency(): Currency
@@ -92,6 +109,37 @@ class Wallet
     public function setDateUpdate(?\DateTimeInterface $date_update): self
     {
         $this->date_update = $date_update;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|WalletOperation[]
+     */
+    public function getOperations(): Collection
+    {
+        return $this->walletOperations;
+    }
+
+    public function addOperation(WalletOperation $walletOperation): self
+    {
+        if (!$this->walletOperations->contains($walletOperation)) {
+            $this->walletOperations[] = $walletOperation;
+            $walletOperation->setWallet($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOperation(WalletOperation $walletOperation): self
+    {
+        if ($this->walletOperations->contains($walletOperation)) {
+            $this->walletOperations->removeElement($walletOperation);
+            // set the owning side to null (unless already changed)
+            if ($walletOperation->getWallet() === $this) {
+                $walletOperation->setWallet(null);
+            }
+        }
 
         return $this;
     }
