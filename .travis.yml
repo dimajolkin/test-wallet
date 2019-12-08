@@ -26,11 +26,11 @@ install:
   - docker run -u $UID -v $PWD/var:/app -w /app nouchka/sqlite3 data.sqlite
   - docker-compose build
   - docker-compose up -d
-  - docker-compose exec app app composer install
-  - docker-compose exec app app ./bin/console doctrine:schema:create
-  - docker-compose exec app app ./bin/console doctrine:migrations:migrate -n
-  - docker-compose exec app app ./bin/console assets:install
-  - docker-compose exec app app ./vendor/bin/codecept build
+  - docker-compose exec app composer install
+  - docker-compose exec app ./bin/console doctrine:schema:create
+  - docker-compose exec app ./bin/console doctrine:migrations:migrate -n
+  - docker-compose exec app ./bin/console assets:install
+  - docker-compose exec app ./vendor/bin/codecept build
 
 
 script:
