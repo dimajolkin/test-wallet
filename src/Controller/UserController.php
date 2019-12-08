@@ -27,10 +27,10 @@ class UserController extends AbstractController
      *
      * @SWG\Response(
      *     response=200,
-     *     description="Returns the rewards of an user",
-     *     @Model(type=User::class, groups="rest")
-     *
+     *     description="get user by id",
+     *     @Model(type=User::class)
      * )
+     *
      * @SWG\Parameter(
      *     name="id",
      *     in="query",
@@ -54,6 +54,19 @@ class UserController extends AbstractController
      * @param WalletFactory $walletFactory
      * @return JsonResponse
      * @throws \Exception
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="get user by id",
+     *     @Model(type=User::class)
+     * )
+     *
+     *  @SWG\Parameter(
+     *         name="user",
+     *         in="formData",
+     *         type="array",
+     *         @Model(type=User::class, groups={"rest"})
+     *  )
      */
     public function createUser(Request $request, WalletFactory $walletFactory)
     {
@@ -81,19 +94,4 @@ class UserController extends AbstractController
             ], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
     }
-
-
-//     * @Route("/v1/user/{id}", name="user", methods={"GET"})
-//     * @param User $user
-//     * @return JsonResponse
-//     */
-//    public function user()
-//    {
-//        return $this->json([
-//            'message' => 'Welcome to your new controller!',
-//            'path' => 'src/Controller/UserController.php',
-//        ]);
-//    }
-//
-
 }

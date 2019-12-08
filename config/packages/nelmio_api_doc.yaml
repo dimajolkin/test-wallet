@@ -1,9 +1,9 @@
 nelmio_api_doc:
     documentation:
         info:
-            title: My App
-            description: This is an awesome app!
+            title: Test App Wallet!
+            description: Test documentations!
             version: 1.0.0
     areas:
         path_patterns: # an array of regexps
-            - ^/api(?!/doc$)
+            - ^/v1(?!/doc$)
