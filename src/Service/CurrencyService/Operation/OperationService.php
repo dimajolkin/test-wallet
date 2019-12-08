@@ -5,7 +5,7 @@ namespace App\Service\CurrencyService\Operation;
 use App\Entity\Wallet;
 use App\Entity\WalletOperation;
 use App\Service\CurrencyService\Money;
-use App\Service\CurrencyService\MoneyOperation;
+use App\Service\CurrencyService\MoneyConverter;
 use App\Service\UserService\UserService;
 
 class OperationService
@@ -15,19 +15,19 @@ class OperationService
      */
     private $userService;
     /**
-     * @var MoneyOperation
+     * @var MoneyConverter
      */
-    private $moneyOperation;
+    private $moneyConverter;
 
-    public function __construct(UserService $userService, MoneyOperation $moneyOperation)
+    public function __construct(UserService $userService, MoneyConverter $moneyConverter)
     {
         $this->userService = $userService;
-        $this->moneyOperation = $moneyOperation;
+        $this->moneyConverter = $moneyConverter;
     }
 
     public function update(Wallet $wallet, Money $money, string $cause)
     {
-        $convertMoney = $this->moneyOperation->convert($wallet->getCurrency(), $money);
+        $convertMoney = $this->moneyConverter->convert($wallet->getCurrency(), $money);
         $wallet->setValue($wallet->getValue() + $convertMoney->getValue());
 
         $operation = new WalletOperation();

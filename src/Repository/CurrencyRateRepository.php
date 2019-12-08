@@ -49,8 +49,8 @@ class CurrencyRateRepository extends ServiceEntityRepository
     }
     */
 
-    public function getLast(int $id): ?CurrencyRate
+    public function getLast(Currency $currency): ?CurrencyRate
     {
-        return $this->findOneBy(['currency_id' => $id], ['date_create' => 'DESC']);
+        return $this->findOneBy(['currency_id' => $currency->getId()], ['date_create' => 'DESC']);
     }
 }

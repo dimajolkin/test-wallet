@@ -4,6 +4,7 @@ namespace App\Service\CurrencyService;
 
 use App\Entity\Currency;
 use App\Entity\CurrencyRate;
+use App\Exception\DomainException;
 use App\Repository\CurrencyRateRepository;
 use App\Repository\CurrencyRepository;
 use App\Service\CurrencyService\RateApi\Rate;
@@ -40,6 +41,16 @@ class CurrencyService
         $this->entityManager = $entityManager;
         $this->currencyRepository = $currencyRepository;
         $this->currencyRateRepository = $currencyRateRepository;
+    }
+
+    public function getActualValue(): ?int
+    {
+        $rate = $this->currencyRateRepository->getLast($this->getRoot());
+        if (!$rate) {
+            throw new DomainException("Currency rate not found, please run ./bin/console app:currency-rate-update");
+        }
+
+        return $rate->getValue();
     }
 
     public function getByName(string $name): ?Currency
@@ -85,7 +96,7 @@ class CurrencyService
         $root = $this->currencyRepository->getRoot();
         $api = new RateApi();
         foreach ($api->getRates($root, $this->currencyRepository) as $rate) {
-            $last = $this->currencyRateRepository->getLast($rate->getCurrency()->getId());
+            $last = $this->currencyRateRepository->getLast($rate->getCurrency());
             if ($last === null || ($last->getValue() !== $rate->getValue())) {
                 $rate = $this->insert($rate);
                 $this->entityManager->persist($rate);

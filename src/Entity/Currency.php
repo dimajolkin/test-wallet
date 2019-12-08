@@ -90,4 +90,9 @@ class Currency
 
         return $this;
     }
+
+    public function equals(Currency $currency): bool
+    {
+        return $this->getId() === $currency->getId();
+    }
 }
