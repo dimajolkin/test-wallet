@@ -31,6 +31,7 @@ install:
   - docker-compose run --rm app composer install
   - docker-compose run --rm app ./bin/console doctrine:schema:create
   - docker-compose run --rm app ./bin/console doctrine:migrations:migrate -n
+  - docker-compose run --rm app ./bin/console assets:install
   - docker-compose run --rm app ./vendor/bin/codecept build
   - docker-compose up -d
 

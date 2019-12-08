@@ -22,4 +22,9 @@ class WalletController extends AbstractController
 
         return $this->json($user->getWallet());
     }
+
+    public function operation()
+    {
+        
+    }
 }

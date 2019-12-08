@@ -13,11 +13,6 @@ class Money
     /** @var int  */
     private $value;
 
-    /**
-     * Money constructor.
-     * @param Currency $currency
-     * @param $value
-     */
     public function __construct(Currency $currency, int $value)
     {
         $this->currency = $currency;

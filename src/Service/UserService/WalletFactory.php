@@ -18,10 +18,9 @@ class WalletFactory
         $this->currencyRepository = $currencyRepository;
     }
 
-
     public function buildEmpty(?string $walletCurrencyName): Wallet
     {
-        $currency = $walletCurrencyName
+        $currency = $walletCurrencyName !== null
             ? $this->currencyRepository->getByName($walletCurrencyName)
             : $this->currencyRepository->getRoot();
         if ($currency === null) {

@@ -8,11 +8,13 @@ use App\Exception\DomainException;
 use App\Form\UserType;
 use App\Repository\CurrencyRepository;
 use App\Service\UserService\WalletFactory;
+use Nelmio\ApiDocBundle\Annotation\Model;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Exception\ValidatorException;
+use Swagger\Annotations as SWG;
 
 class UserController extends AbstractController
 {
@@ -22,6 +24,19 @@ class UserController extends AbstractController
      * @Route("/v1/user/{id}", name="get_user", methods={"GET"})
      * @param User|null $user
      * @return JsonResponse
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Returns the rewards of an user",
+     *     @Model(type=User::class, groups="rest")
+     *
+     * )
+     * @SWG\Parameter(
+     *     name="id",
+     *     in="query",
+     *     type="integer",
+     *     description="user id"
+     * )
      */
     public function user(?User $user)
     {
