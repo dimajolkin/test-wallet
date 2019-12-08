@@ -14,6 +14,7 @@ class UserCest
         $I->seeResponseIsJson();
         return json_decode($I->grabResponse(), true);
     }
+
     public function getNotFoundUser(AcceptanceTester $I)
     {
         $I->sendGET('/v1/user/8888');
@@ -32,4 +33,10 @@ class UserCest
         $I->assertEquals($createdUser, $this->getUserId($I, $createdUser['id']));
     }
 
+    public function getNotFoundWallet(AcceptanceTester $I)
+    {
+        $I->sendGET('/v1/user/8888/wallet');
+        $I->seeResponseCodeIs(HttpCode::NOT_FOUND);
+        $I->seeResponseIsJson();
+    }
 }

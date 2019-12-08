@@ -7,7 +7,6 @@ use App\Entity\Wallet;
 use App\Form\UserType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class UserController extends AbstractController
@@ -20,13 +19,11 @@ class UserController extends AbstractController
      */
     public function user(?User $user)
     {
-        if ($user !== null) {
-            return $this->json($user);
+        if ($user === null) {
+            return $this->notFoundResponse();
         }
 
-        return $this->json([
-            'message' => 'not found',
-        ], Response::HTTP_NOT_FOUND);
+        return $this->json($user);
     }
 
     /**
@@ -74,14 +71,5 @@ class UserController extends AbstractController
 //        ]);
 //    }
 //
-//    /**
-//     * @Route("/v1/user/{id}/wallet", name="user")
-//     */
-//    public function wallet()
-//    {
-//        return $this->json([
-//            'message' => 'Welcome to your new controller!',
-//            'path' => 'src/Controller/UserController.php',
-//        ]);
-//    }
+
 }
