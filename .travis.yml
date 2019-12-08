@@ -27,6 +27,7 @@ install:
   - docker-compose build
   - docker-compose up -d
   - sleep 2
+  - docker ps
   - docker-compose exec app composer install
   - docker-compose exec app ./bin/console doctrine:schema:create
   - docker-compose exec app ./bin/console doctrine:migrations:migrate -n
