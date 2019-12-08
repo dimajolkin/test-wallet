@@ -21,20 +21,20 @@ before_install:
   - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
-  - composer self-update
 
 install:
   - docker run -u $UID -v $PWD/var:/app -w /app nouchka/sqlite3 data.sqlite
   - docker-compose build
-  - docker-compose run --rm app composer install
-  - docker-compose run --rm app ./bin/console doctrine:schema:create
-  - docker-compose run --rm app ./bin/console doctrine:migrations:migrate -n
-  - docker-compose run --rm app ./bin/console assets:install
-  - docker-compose run --rm app ./vendor/bin/codecept build
   - docker-compose up -d
+  - docker-compose exec app app composer install
+  - docker-compose exec app app ./bin/console doctrine:schema:create
+  - docker-compose exec app app ./bin/console doctrine:migrations:migrate -n
+  - docker-compose exec app app ./bin/console assets:install
+  - docker-compose exec app app ./vendor/bin/codecept build
+
 
 script:
-  - composer check-cs
-  - composer phpstan
-  - docker-compose run --rm app ./bin/console app:currency-rate-update
-  - docker-compose run --rm app ./vendor/bin/codecept run
+  - docker-compose exec app composer check-cs
+  - docker-compose exec app composer phpstan
+  - docker-compose exec app ./bin/console app:currency-rate-update
+  - docker-compose exec app ./vendor/bin/codecept run

@@ -46,7 +46,7 @@ class CurrencyService
     public function getActualValue(): ?int
     {
         $rate = $this->currencyRateRepository->getLast($this->getRoot());
-        if (!$rate) {
+        if ($rate === null) {
             throw new DomainException("Currency rate not found, please run ./bin/console app:currency-rate-update");
         }
 
