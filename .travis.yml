@@ -26,14 +26,11 @@ before_install:
 
 install:
   - docker run -u $UID -v $PWD/var:/app -w /app nouchka/sqlite3 data.sqlite
-  - docker ps
   - docker-compose run --rm app composer install
   - docker-compose run --rm app ./bin/console doctrine:schema:create
   - docker-compose run --rm app ./bin/console doctrine:migrations:migrate -n
-  - docker-compose run --rm app ./bin/console app:currency-rate-update
   - docker-compose run --rm app ./bin/console assets:install
   - docker-compose run --rm app ./vendor/bin/codecept build
-
 
 script:
   - docker-compose run --rm app composer check-cs
