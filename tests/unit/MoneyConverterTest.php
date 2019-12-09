@@ -3,6 +3,7 @@
 namespace App\Tests\unit;
 
 use App\Entity\Currency;
+use App\Entity\CurrencyRate;
 use App\Service\CurrencyService\CurrencyService;
 use App\Service\CurrencyService\Money;
 use App\Service\CurrencyService\MoneyConverter;
@@ -14,7 +15,12 @@ class MoneyConverterTest extends Test
     private $converter;
     private $rub;
     private $usd;
-    private const USD_RATE = 7000;
+    private const RATES = [
+        'USD' => 1,
+        'RUB' => self::RUB_RATE,
+    ];
+
+    private const RUB_RATE = 7000;
 
     public function __construct($name = null, array $data = [], $dataName = '')
     {
@@ -31,7 +37,12 @@ class MoneyConverterTest extends Test
     public function _before()
     {
         $service = $this->make(CurrencyService::class, [
-            'getActualValue' => self::USD_RATE,
+            'getCurrencyRate' => function (Currency $currency) {
+                $rate = self::RATES[$currency->getName()] ?? null;
+                return $this->make(CurrencyRate::class, [
+                    'getValue' => $rate,
+                ]);
+            },
             'getRoot' => $this->usd,
         ]);
         $this->converter = new MoneyConverter($service);
@@ -42,12 +53,14 @@ class MoneyConverterTest extends Test
     {
         return [
             [$this->rub, new Money($this->rub, 100), new Money($this->rub, 100)],
+            [$this->rub, new Money($this->usd, 100), new Money($this->rub, self::RUB_RATE * 100)],
+            [$this->rub, new Money($this->usd, 75), new Money($this->rub, self::RUB_RATE * 75)],
+
             [$this->usd, new Money($this->usd, 150), new Money($this->usd, 150)],
-            [$this->rub, new Money($this->usd, 100), new Money($this->rub, self::USD_RATE * 100)],
-            [$this->rub, new Money($this->usd, 75), new Money($this->rub, self::USD_RATE * 75)],
-            [$this->rub, new Money($this->usd, 1), new Money($this->rub, self::USD_RATE)],
-            [$this->usd, new Money($this->rub, self::USD_RATE * 100), new Money($this->usd, 100)],
-            [$this->usd, new Money($this->rub, self::USD_RATE * 75), new Money($this->usd, 75)],
+            [$this->usd, new Money($this->usd, 100), new Money($this->usd, 100)],
+
+            [$this->usd, new Money($this->rub, self::RUB_RATE * 100), new Money($this->usd, 100)],
+            [$this->usd, new Money($this->rub, self::RUB_RATE * 75), new Money($this->usd, 75)],
         ];
     }
 

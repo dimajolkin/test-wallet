@@ -3,6 +3,7 @@
 namespace App\Service\CurrencyService;
 
 use App\Entity\Currency;
+use App\Exception\DomainException;
 
 class MoneyConverter
 {
@@ -17,23 +18,20 @@ class MoneyConverter
     }
 
     /**
-     * @param Currency $resultCurrency
+     * @param Currency $base
      * @param Money $money
      * @return Money
-     * @throws \App\Exception\DomainException
+     * @throws DomainException
      */
-    public function convert(Currency $resultCurrency, Money $money): Money
+    public function convert(Currency $base, Money $money): Money
     {
-        $root = $this->currencyService->getRoot();
-        $actualValue = $this->currencyService->getActualValue();
-        if ($resultCurrency->equals($money->getCurrency())) {
+        if ($base->equals($money->getCurrency())) {
             return $money;
         }
 
-        if (!$money->getCurrency()->equals($root)) {
-            return new Money($resultCurrency, $money->getValue() / $actualValue);
-        }
+        $baseCurrencyRate = $this->currencyService->getCurrencyRate($base);
+        $moneyCurrencyRate = $this->currencyService->getCurrencyRate($money->getCurrency());
 
-        return new Money($resultCurrency, $money->getValue() * $actualValue);
+        return new Money($base, ($money->getValue() * $baseCurrencyRate->getValue()) / $moneyCurrencyRate->getValue());
     }
 }

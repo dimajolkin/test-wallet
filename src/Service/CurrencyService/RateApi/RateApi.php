@@ -17,8 +17,7 @@ class RateApi
     public function getRates(Currency $root, CurrencyRepository $currencyRepository): iterable
     {
         $currencies = $currencyRepository->findAllGroupByName();
-        unset($currencies[$root->getName()]);
-
+        $root = $currencyRepository->getRoot();
         $context = file_get_contents(self::API_URL . '?' . http_build_query([
                 'base' => $root->getName(),
                 'symbols' => implode(',', array_keys($currencies)),
@@ -26,7 +25,7 @@ class RateApi
         $response = json_decode($context, true);
         foreach ($response['rates'] as  $currencyName => $value) {
             $currency = $currencies[$currencyName] ?? null;
-            yield new Rate($currency, (int) ($currency->getRation() * $value));
+            yield new Rate($currency, (int) ($value * $currency->getRation()));
         }
     }
 }

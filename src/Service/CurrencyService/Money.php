@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Service\CurrencyService;
-
 
 use App\Entity\Currency;
 
@@ -33,5 +31,10 @@ class Money
     public function getValue(): int
     {
         return $this->value;
+    }
+
+    public function toString(): string
+    {
+        return $this->getCurrency()->getName() . ' ' . $this->getValue();
     }
 }

@@ -43,14 +43,18 @@ class CurrencyService
         $this->currencyRateRepository = $currencyRateRepository;
     }
 
-    public function getActualValue(): ?int
+    public function getCurrencyRate(Currency $currency): CurrencyRate
     {
-        $rate = $this->currencyRateRepository->getLast($this->getRoot());
+        $rate = $this->currencyRateRepository->getLast($currency);
         if ($rate === null) {
             throw new DomainException("Currency rate not found, please run ./bin/console app:currency-rate-update");
         }
+        return $rate;
+    }
 
-        return $rate->getValue();
+    public function getRootRate(): CurrencyRate
+    {
+        return  $this->getCurrencyRate($this->getRoot());
     }
 
     public function getByName(string $name): ?Currency
@@ -91,10 +95,15 @@ class CurrencyService
         return $entity;
     }
 
+    protected function getRateApi():RateApi
+    {
+        return new RateApi();
+    }
+
     public function updateRate(): void
     {
         $root = $this->currencyRepository->getRoot();
-        $api = new RateApi();
+        $api = $this->getRateApi();
         foreach ($api->getRates($root, $this->currencyRepository) as $rate) {
             $last = $this->currencyRateRepository->getLast($rate->getCurrency());
             if ($last === null || ($last->getValue() !== $rate->getValue())) {

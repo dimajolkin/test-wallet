@@ -3,7 +3,6 @@
 namespace App\Service\CurrencyService\Operation;
 
 use App\Entity\Wallet;
-use App\Entity\WalletOperation;
 use App\Service\CurrencyService\Money;
 use App\Service\CurrencyService\MoneyConverter;
 use App\Service\UserService\UserService;
@@ -18,26 +17,32 @@ class OperationService
      * @var MoneyConverter
      */
     private $moneyConverter;
+    /**
+     * @var OperationFactory
+     */
+    private $operationFactory;
 
-    public function __construct(UserService $userService, MoneyConverter $moneyConverter)
-    {
+    public function __construct(
+        UserService $userService,
+        OperationFactory $operationFactory,
+        MoneyConverter $moneyConverter
+    ) {
         $this->userService = $userService;
         $this->moneyConverter = $moneyConverter;
+        $this->operationFactory = $operationFactory;
     }
 
+    /**
+     * @param Wallet $wallet
+     * @param Money $money
+     * @param string $cause
+     * @throws \App\Exception\DomainException
+     */
     public function update(Wallet $wallet, Money $money, string $cause)
     {
         $convertMoney = $this->moneyConverter->convert($wallet->getCurrency(), $money);
         $wallet->setValue($wallet->getValue() + $convertMoney->getValue());
-
-        $operation = new WalletOperation();
-//        $operation->setWallet($wallet);
-        $operation->setWalletValue($wallet->getValue());
-        $operation->setValue($convertMoney->getValue());
-        $operation->setBaseValue($money->getValue());
-        $operation->setBaseCurrency($money->getCurrency());
-        $operation->setCause($cause);
-        $operation->setDateCreate(new \DateTime('now'));
+        $operation = $this->operationFactory->build($wallet, $money, $convertMoney, $cause);
 
         $wallet->addOperation($operation);
     }

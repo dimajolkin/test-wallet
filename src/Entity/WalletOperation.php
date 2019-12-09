@@ -49,6 +49,12 @@ class WalletOperation
     private $base_currency;
 
     /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\CurrencyRate", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $currency_rate;
+
+    /**
      * @ORM\Column(type="datetime")
      */
     private $date_create;
@@ -56,6 +62,16 @@ class WalletOperation
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getCurrencyRate(): CurrencyRate
+    {
+        return $this->currency_rate;
+    }
+
+    public function setCurrencyRate(CurrencyRate $currencyRate): void
+    {
+        $this->currency_rate = $currencyRate;
     }
 
     public function getWallet(): ?Wallet

@@ -24,7 +24,7 @@ class ApiExceptionEventListener implements EventSubscriberInterface, LoggerAware
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
         $e = $event->getException();
-        if ($e instanceof HttpExceptionInterface || $e instanceof DomainException) {
+        if ($e instanceof HttpExceptionInterface) {
             $response = new JsonResponse([
                     'message' => $e->getMessage(),
                 ],

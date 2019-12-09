@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Service\CurrencyService\Money;
 use App\Service\CurrencyService\MoneyFactory;
 use App\Service\CurrencyService\Operation\OperationService;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -24,7 +23,13 @@ class WalletController extends AbstractController
             return $this->notFoundResponse();
         }
 
-        return $this->json($user->getWallet());
+        $wallet = $user->getWallet();
+        return $this->json([
+            'currency' => $wallet->getCurrency()->getName(),
+            'value' => $wallet->getFormatValue(),
+            'date_create' => $wallet->getDateCreate(),
+            'date_update' => $wallet->getDateUpdate(),
+        ]);
     }
 
     /**
@@ -34,15 +39,15 @@ class WalletController extends AbstractController
      * @param OperationService $operationService
      * @param Request $request
      * @return JsonResponse
+     * @throws \App\Exception\DomainException
      */
     public function operation(User $user, MoneyFactory $moneyFactory, OperationService $operationService, Request $request)
     {
         $wallet = $user->getWallet();
-        //@TODO add validation
         $money = $moneyFactory->build(
             $wallet,
             $request->request->get('currency'),
-            $request->request->getInt('value')
+            $request->request->get('value')
         );
         $operationService->update($wallet, $money, $request->get('cause'));
 

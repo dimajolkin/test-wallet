@@ -6,7 +6,9 @@ use App\Service\CurrencyService\Money;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\AccessType;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\SerializedName;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\WalletRepository")
@@ -80,6 +82,11 @@ class Wallet
     public function getValue(): ?int
     {
         return $this->value;
+    }
+
+    public function getFormatValue(): float
+    {
+        return round($this->getValue() / $this->getCurrency()->getRation(), 2);
     }
 
     public function setValue(int $value): self
