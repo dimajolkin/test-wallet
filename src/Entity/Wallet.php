@@ -21,7 +21,7 @@ class Wallet
     private $id;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Currency", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\Currency", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      * @Groups({"rest"})
      */
