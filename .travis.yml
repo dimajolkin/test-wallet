@@ -38,5 +38,5 @@ script:
   - docker-compose run --rm app composer check-cs
   - docker-compose run --rm app composer phpstan
   - docker-compose run --rm app ./bin/console app:currency-rate-update
-  - docker-compose run --rm app ./bin/console server:start 0.0.0.0:8888
+  - docker-compose up -d
   - docker-compose run --rm app ./vendor/bin/codecept run
