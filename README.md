@@ -51,4 +51,4 @@ group by op.wallet_id;
  * make build
  * make up
  
- Примеры запросов см. в example.http
+ Примеры запросов см. в [пример](example.http)
