@@ -19,7 +19,7 @@ class OperationFactory
         $this->currencyService = $currencyService;
     }
 
-    public function build(Wallet $wallet, Money $base, Money $money, string $cause): WalletOperation
+    public function build(Wallet $wallet, Money $base, Money $money, string $cause, string $type): WalletOperation
     {
         $operation = new WalletOperation();
         $operation->setCurrencyRate($this->currencyService->getRootRate());
@@ -28,6 +28,7 @@ class OperationFactory
         $operation->setBaseValue($base->getValue());
         $operation->setBaseCurrency($base->getCurrency());
         $operation->setCause($cause);
+        $operation->setType($type);
         $operation->setDateCreate(new \DateTime('now'));
 
         return $operation;

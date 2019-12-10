@@ -43,7 +43,7 @@ class OperationService
     {
         $convertMoney = $this->moneyConverter->convert($wallet->getCurrency(), $money);
         $wallet->setValue($wallet->getValue() + $convertMoney->getValue());
-        $operation = $this->operationFactory->build($wallet, $money, $convertMoney, $cause);
+        $operation = $this->operationFactory->build($wallet, $money, $convertMoney, $cause, $type);
 
         $wallet->addOperation($operation);
     }

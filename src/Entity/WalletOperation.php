@@ -37,6 +37,11 @@ class WalletOperation
     private $cause;
 
     /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $type;
+
+    /**
      * @ORM\Column(type="integer")
      */
     private $base_value;
@@ -61,6 +66,16 @@ class WalletOperation
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): void
+    {
+        $this->type = $type;
     }
 
     public function getCurrencyRate(): CurrencyRate
