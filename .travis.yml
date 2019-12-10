@@ -15,7 +15,6 @@ env:
     - DOCKER_COMPOSE_VERSION=1.24.1
     - SYMFONY_DEPRECATIONS_HELPER=0
     - APP_ENV="dev"
-    - DSHELL="docker-compose run -u $UID:$UID --rm app"
 
 before_install:
   - sudo rm /usr/local/bin/docker-compose
@@ -26,10 +25,8 @@ before_install:
   - docker-compose build
 
 install:
-  - bash -c "$DSHELL ./build.sh"
-  - bash -c "$DSHELL ./vendor/bin/codecept build"
-  - bash -c "$DSHELL composer check-cs"
-  - bash -c "$DSHELL composer phpstan"
+  - make build
 script:
-  - docker-compose up -d
-  - bash -c "$DSHELL ./vendor/bin/codecept run"
+  - make linters
+  - make up
+  - make test
