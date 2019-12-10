@@ -1,6 +1,3 @@
-#
-#
-#
 # Создание пользователя
 
 POST http://localhost:8888/v1/user
@@ -8,24 +5,24 @@ Content-Type: application/json
 
 {
   "name": "Vasilisa Petrova",
-  "wallet_currency": "RUB"
+  "wallet_currency": "USD"
 }
 
 ### получение пользователя
 
-GET http://localhost:8888/v1/user/198
+GET http://localhost:8888/v1/user/2
 
 ### получение кошелька
 
-GET http://localhost:8888/v1/user/198/wallet/198
+GET http://localhost:8888/v1/user/2/wallet/2
 
 ### получение баланса
 
-GET http://localhost:8888/v1/user/198/wallet/198/balance
+GET http://localhost:8888/v1/user/2/wallet/2/balance
 
 ### Положить дениги на счёт рубли
 
-POST http://localhost:8888/v1/user/198/wallet/198/operation
+POST http://localhost:8888/v1/user/2/wallet/2/operation
 Content-Type: application/json
 
 {
@@ -37,7 +34,7 @@ Content-Type: application/json
 
 ### Положить дениги на счёт доллары
 
-POST http://localhost:8888/v1/user/198/wallet/198/operation
+POST http://localhost:8888/v1/user/2/wallet/2/operation
 Content-Type: application/json
 
 {

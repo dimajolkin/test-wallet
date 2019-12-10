@@ -45,3 +45,10 @@ group by op.wallet_id;
 
 
 ----
+ ### Инструкция по сборке
+ Настроена на порт 8888
+ 
+ * make build
+ * make up
+ 
+ Примеры запросов см. в example.http
