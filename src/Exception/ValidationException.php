@@ -13,6 +13,6 @@ class ValidationException extends ValidatorException
         foreach ($violations as $violation) {
             $messages[] = $violation->getMessage();
         }
-        $this->message = implode(', ', $messages);
+        parent::__construct(implode(', ', $messages));
     }
 }
