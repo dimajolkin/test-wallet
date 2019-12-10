@@ -25,6 +25,6 @@ final class Version20191207193233 extends AbstractMigration
 
     public function down(Schema $schema) : void
     {
-        $this->addSql("TRUNCATE currency");
+        $this->addSql("DELETE FROM currency");
     }
 }

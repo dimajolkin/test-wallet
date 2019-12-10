@@ -2,8 +2,8 @@
 
 namespace App\Tests\acceptance;
 
-use App\Service\CurrencyService\CurrencyEnum;
 use App\Service\CurrencyService\Operation\CauseEnum;
+use App\Service\CurrencyService\Operation\TypeEnum;
 use App\Tests\AcceptanceTester;
 use Codeception\Example;
 use Codeception\Util\HttpCode;
@@ -57,7 +57,7 @@ class UserCest
 
     public function getNotFoundWallet(AcceptanceTester $I)
     {
-        $I->sendGET('/v1/user/8888/wallet');
+        $I->sendGET('/v1/user/1/wallet/2');
         $I->seeResponseCodeIs(HttpCode::NOT_FOUND);
         $I->seeResponseIsJson();
     }
@@ -66,7 +66,7 @@ class UserCest
     {
         $id = $this->createUser($I, new Example(['wallet_currency' => 'RUB']));
         $I->assertNotEmpty($id);
-        $I->sendGET("/v1/user/$id/wallet");
+        $I->sendGET("/v1/user/$id/wallet/{$id}");
         $I->seeResponseCodeIs(HttpCode::OK);
         $I->seeResponseIsJson();
         $I->canSeeResponseMatchesJsonType([
@@ -106,20 +106,21 @@ class UserCest
         $I->haveInDatabase('currency_rate', ['currency_id' => 2, 'value' => 7000, 'date_create' => '3019-12-09 22:56:59']);
 
         $id = $this->createUser($I, $example);
-        $walletId = $I->grabFromDatabase('user', 'wallet_id', ['id' => $id]);
+        $walletId = (int) $I->grabFromDatabase('user', 'wallet_id', ['id' => $id]);
         $I->seeInDatabase('wallet', ['id' => $walletId, 'value' => 0]);
-
-        $I->sendPOST("/v1/user/{$id}/wallet/operation", [
+        $I->sendPOST("/v1/user/{$id}/wallet/{$walletId}/operation", [
             'currency' => $example['currency'],
             'value' => $example['value'],
+            'type' => TypeEnum::DEBIT,
             'cause' => CauseEnum::STOCK,
         ]);
+
         $I->seeResponseCodeIs(HttpCode::OK);
         $I->seeResponseIsJson();
         $I->seeResponseContains('{"status":"ok"}');
 
-        $I->sendGET("/v1/user/$id/wallet");
-        $wallet = json_decode($I->grabResponse(), true);
-        $I->assertEquals($example['result'], $wallet['value']);
+        $I->sendGET("/v1/user/$id/wallet/{$walletId}/balance");
+        $balance = json_decode($I->grabResponse(), true);
+        $I->assertEquals($example['result'], $balance['balance']);
     }
 }

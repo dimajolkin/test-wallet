@@ -18,7 +18,6 @@ class WalletOperation
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Wallet", inversedBy="walletOperations")
-     * @ORM\JoinColumn(nullable=false)
      */
     private $wallet;
 

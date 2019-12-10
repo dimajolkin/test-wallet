@@ -10,7 +10,7 @@ modules:
         - \App\Tests\Helper\Acceptance
         - Asserts
         - REST:
-            url: http://app:8888
+            url: http://%APP_HOST%
             depends: PhpBrowser
             part: Json
         - Db:

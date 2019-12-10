@@ -26,6 +26,16 @@ Test App
 
 #### SQL запрос
 Написать SQL запрос, который вернет сумму, полученную по причине refund за последние 7 дней.
+```sqlite
+
+select w.id, sum(op.value) / 100 as value,  c.name
+from wallet_operation op
+left join wallet w on w.id = wallet_id
+left join currency c on c.id = w.currency_id
+where op.date_create >= date('now', '-7 day' ) and cause = 'refund'
+group by op.wallet_id;
+
+```
 
 #### Технические требования
 * Серверная логика должна быть написана на PHP версии >=7.0

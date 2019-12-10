@@ -103,6 +103,9 @@ class CurrencyService
     public function updateRate(): void
     {
         $root = $this->currencyRepository->getRoot();
+        if ($root === null) {
+            throw new \DomainException("Root currency not found, Check run migrations");
+        }
         $api = $this->getRateApi();
         foreach ($api->getRates($root, $this->currencyRepository) as $rate) {
             $last = $this->currencyRateRepository->getLast($rate->getCurrency());

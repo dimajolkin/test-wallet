@@ -36,9 +36,10 @@ class OperationService
      * @param Wallet $wallet
      * @param Money $money
      * @param string $cause
+     * @param string $type
      * @throws \App\Exception\DomainException
      */
-    public function update(Wallet $wallet, Money $money, string $cause)
+    public function update(Wallet $wallet, Money $money, string $cause, string $type)
     {
         $convertMoney = $this->moneyConverter->convert($wallet->getCurrency(), $money);
         $wallet->setValue($wallet->getValue() + $convertMoney->getValue());
