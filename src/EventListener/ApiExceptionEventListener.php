@@ -8,9 +8,11 @@ use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\Validator\Exception\ValidatorException;
 
 class ApiExceptionEventListener implements EventSubscriberInterface, LoggerAwareInterface
 {
@@ -29,6 +31,13 @@ class ApiExceptionEventListener implements EventSubscriberInterface, LoggerAware
                     'message' => $e->getMessage(),
                 ],
                 $e->getStatusCode()
+            );
+        } else if ($e instanceof ValidatorException) {
+            $this->logger->warning($e->getMessage());
+            $response = new JsonResponse([
+                'message' => $e->getMessage(),
+            ],
+                Response::HTTP_BAD_REQUEST
             );
         } else {
             $this->logger->warning($e->getMessage());

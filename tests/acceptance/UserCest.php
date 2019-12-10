@@ -2,8 +2,8 @@
 
 namespace App\Tests\acceptance;
 
-use App\Service\CurrencyService\Operation\CauseEnum;
-use App\Service\CurrencyService\Operation\TypeEnum;
+use App\Entity\CauseEnum;
+use App\Entity\TypeEnum;
 use App\Tests\AcceptanceTester;
 use Codeception\Example;
 use Codeception\Util\HttpCode;
@@ -97,8 +97,6 @@ class UserCest
      *
      * @example {"wallet_currency": "RUB", "currency": "RUB", "value": 1, "result": 1}
      * @example {"wallet_currency": "RUB", "currency": "RUB", "value": 100, "result": 100}
-     *
-     *
      */
     public function putMoneyInWallet(AcceptanceTester $I, Example $example)
     {
@@ -112,7 +110,7 @@ class UserCest
             'currency' => $example['currency'],
             'value' => $example['value'],
             'type' => TypeEnum::DEBIT,
-            'cause' => CauseEnum::STOCK,
+            'cause' => CauseEnum::REFUND,
         ]);
 
         $I->seeResponseCodeIs(HttpCode::OK);
@@ -122,5 +120,22 @@ class UserCest
         $I->sendGET("/v1/user/$id/wallet/{$walletId}/balance");
         $balance = json_decode($I->grabResponse(), true);
         $I->assertEquals($example['result'], $balance['balance']);
+    }
+
+    /**
+     * @param AcceptanceTester $I
+     * @param Example $example
+     *
+     * @example {"var": 12}
+     * @example {"currency": "RUBLIK", "value": 1, "type": "debit", "cause": "refund"}
+     * @example {"currency": "RUB", "value": "string", "type": "debit", "cause": "refund"}
+     * @example {"currency": "RUB", "value": 1, "type": "string", "cause": "refund"}
+     * @example {"currency": "RUB", "value": 1, "type": "debit", "cause": "string"}
+     */
+    public function testValidationOperation(AcceptanceTester $I, Example $example)
+    {
+        $id = $this->createUser($I, new Example(['wallet_currency' => 'RUB']));
+        $I->sendPOST("/v1/user/{$id}/wallet/{$id}/operation", iterator_to_array($example));
+        $I->seeResponseCodeIs(HttpCode::BAD_REQUEST);
     }
 }

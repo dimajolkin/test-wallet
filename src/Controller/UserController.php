@@ -24,19 +24,6 @@ class UserController extends AbstractController
      * @Route("/v1/user/{id}", name="get_user", methods={"GET"})
      * @param User|null $user
      * @return JsonResponse
-     *
-     * @SWG\Response(
-     *     response=200,
-     *     description="get user by id",
-     *     @Model(type=User::class)
-     * )
-     *
-     * @SWG\Parameter(
-     *     name="id",
-     *     in="query",
-     *     type="integer",
-     *     description="user id"
-     * )
      */
     public function user(?User $user)
     {
@@ -54,19 +41,6 @@ class UserController extends AbstractController
      * @param WalletFactory $walletFactory
      * @return JsonResponse
      * @throws \Exception
-     *
-     * @SWG\Response(
-     *     response=200,
-     *     description="get user by id",
-     *     @Model(type=User::class)
-     * )
-     *
-     *  @SWG\Parameter(
-     *         name="user",
-     *         in="formData",
-     *         type="array",
-     *         @Model(type=User::class, groups={"rest"})
-     *  )
      */
     public function createUser(Request $request, WalletFactory $walletFactory)
     {

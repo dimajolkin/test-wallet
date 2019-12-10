@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Service\CurrencyService\Operation;
+namespace App\Entity;
 
 class TypeEnum
 {
     const DEBIT = 'debit';
     const CREDIT = 'credit';
+    const ALL = [self::DEBIT, self::CREDIT];
 }

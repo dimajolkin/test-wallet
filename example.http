@@ -1,0 +1,50 @@
+#
+#
+#
+# Создание пользователя
+
+POST http://localhost:8888/v1/user
+Content-Type: application/json
+
+{
+  "name": "Vasilisa Petrova",
+  "wallet_currency": "RUB"
+}
+
+### получение пользователя
+
+GET http://localhost:8888/v1/user/198
+
+### получение кошелька
+
+GET http://localhost:8888/v1/user/198/wallet/198
+
+### получение баланса
+
+GET http://localhost:8888/v1/user/198/wallet/198/balance
+
+### Положить дениги на счёт рубли
+
+POST http://localhost:8888/v1/user/198/wallet/198/operation
+Content-Type: application/json
+
+{
+  "currency": "RUB",
+  "value": 100,
+  "type": "debit",
+  "cause": "refund"
+}
+
+### Положить дениги на счёт доллары
+
+POST http://localhost:8888/v1/user/198/wallet/198/operation
+Content-Type: application/json
+
+{
+  "currency": "USD",
+  "value": 1,
+  "type": "debit",
+  "cause": "refund"
+}
+
+###
