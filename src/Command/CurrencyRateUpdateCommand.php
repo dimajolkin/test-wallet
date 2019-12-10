@@ -23,7 +23,7 @@ class CurrencyRateUpdateCommand extends Command
 
     protected function configure(): void
     {
-        $this->setDescription('Actualization currency rate');
+        $this->setDescription('Обновляет курсы валют');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
